@@ -1,0 +1,150 @@
+<html>
+	<head>
+		<title>Funny Devs Quotes</title>
+		
+		<link href='https://fonts.googleapis.com/css?family=Merriweather' rel='stylesheet' type='text/css'>
+		<link href='https://fonts.googleapis.com/css?family=Playfair+Display' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+        <script type="application/javascript" src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-3.3.0.js"></script>
+        <script type="application/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.4.min.js"></script>        
+		<style>		
+			
+			html{
+			  height:100%;
+			}
+            
+			body{
+			  background-color:#440951;
+			  background-image: -moz-radial-gradient(center 45deg,circle cover, #b032cb, #440951);
+			  background-image: -webkit-gradient(radial, 50% 50%, 0, 50% 50%,800, from(#b032cb), to(#440951));
+			  background-image: radial-gradient(center 45deg,circle cover, #b032cb, #440951);
+			}
+
+			#quoteText {			    
+				font-family: 'Playfair Display', serif;				
+				font-size: 30pt;
+				font-weight: bold;
+				text-align: center;
+				padding-left: 300px;
+				padding-right: 300px;
+				padding-top: 200px;
+				min-height: 300px;
+			}
+
+			#quoteAuthor {			    
+				font-family: 'Playfair Display', serif;				
+				font-size: 18pt;
+				font-style: italic;
+				font-weight: bold;				
+				padding-left: 70%;
+				padding-top: 50px;
+			}
+            
+            #quoteCommand {                
+                margin: auto;
+                width: 200px;
+            }
+            
+            #quoteCommand > button { 
+                margin: 0 auto;
+                width: 200px;
+                color: #aaa;
+                font-weight: bold;
+            }
+
+			.inset-text {
+			    color:#bbaaaa;
+				text-shadow:#333 2px 2px 2px;
+			}
+
+			.inset-text {
+			    color:#bbaaaa;
+				text-shadow:#333 2px 2px 2px;
+			}
+
+			.logo {
+				width: 32px;
+				height: 32px;
+				float: left;
+				margin-right: 52px;
+                border-radius: 4px;
+                opacity: 0.6;
+			}
+            
+            #logoband {
+                text-align: center;
+                color: #ddd;
+                opacity: 0.6;
+                font-size: 8pt;
+                margin:auto;
+                width: 200px;
+                font-family: Merriweather, serif;                
+            }
+
+			#github {
+				background: url('images/GitHub-Mark-Light-32px.png') no-repeat; 
+				background-size: 100%;				
+			}
+
+			#knockout {
+				background: url('images/knockoutjs.png') no-repeat; 
+				background-size: 100%;
+			}
+
+			#jquery {
+				background: url('images/jquery-mark-light.png') no-repeat; 
+				background-size: 100%;
+                margin-right: 0px;
+			}
+
+		</style>
+	</head>    
+	<body>	
+		<div id="quoteText" class="inset-text" data-bind="text: quoteText"></div>
+		<div id="quoteAuthor" class="inset-text" data-bind="text: quoteAuthor"></div>
+        <div id="quoteCommand">
+            <button class="pure-button pure-button-active" data-bind="click :$root.pickQuote">Pick a quote</button>
+        </div>
+        <br />
+		<div id="logoband">
+            <p>Made with love using</p>
+			<div id="knockout" class="logo"></div>
+            <div id="github" class="logo"></div>			
+			<div id="jquery" class="logo"></div>
+            <br />            
+		</div>
+        <script>
+            
+        	// This is a simple *viewmodel* - JavaScript that defines the data and behavior of your UI
+            function AppViewModel() {
+                var self = this;
+                self.quoteText = ko.observable("Funny quote of the day");
+                self.quoteAuthor = ko.observable("Author");
+
+                //Function To Retrive Data from using ajax call to WEB API 
+                self.pickQuote = function(){
+                	$.ajax({ 
+						type: "GET", 
+						url: "http://localhost:5004/api/quote", 
+						contentType: "application/json; charset=utf-8", 
+						dataType: "json", 
+						success: function (data) { 
+				        	self.quoteText(data.Text);
+							self.quoteAuthor(data.Author);
+						}, 
+						error: function (err) { 
+							alert("Error : " + err.status + "   " + err.statusText); 
+						} 
+					});
+                };
+                // Pick the first quote
+                self.pickQuote();
+            }
+
+            // Activates knockout.js
+            ko.applyBindings(new AppViewModel());
+        </script>    
+    </body>
+</html>
